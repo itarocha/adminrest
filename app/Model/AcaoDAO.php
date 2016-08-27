@@ -4,8 +4,13 @@
 namespace App\Model;
 
 use DB;
+use Laravel\Database\Exception;
 
 class AcaoDAO {
+
+  public function getRules(){
+    return array('descricao' => 'required|min:3|max:255',);
+  }
 
   public function listagem(){
     $query = DB::table('acao as a')
@@ -31,43 +36,53 @@ class AcaoDAO {
     //dd(DB::getQueryLog());
   }
 
+  // http://v3.golaravel.com/api/class-Exception.html
   public function insert($array){
-    //['email' => 'john@example.com', 'votes' => 0]
-
-    $id = DB::table('acao')->insertGetId(
-      $array
-    );
-    return $id;
+    try {
+      $id = DB::table('acao')->insertGetId($array);
+      return (object)array('id' => $id, 'status_code' => 200, 'mensagem' => 'Criado com sucesso');
+    } catch (\Exception $e){
+      return (object)array('id' => -1, 'status_code' => 500, 'mensagem' => $e->getMessage());
+    }
   }
 
   // Sucesso = 1, Não = 0, Excessão = -1
   public function update($id, $array){
     $model = $this->getById($id);
-    $retorno = $model ? 200 : 404;
-    if ($retorno == 404) {
-      return $retorno;
+
+    if (!$model){
+      return (object)array('status_code'=>404,'mensagem'=>'Não encontrado');
     }
     //DB::beginTransaction();
+    //dd($array);
     try {
       $affected = DB::table('acao')
                     ->where('id_acao',$id)
                     ->update($array);
         //DB::commit();
         $retorno = ($affected == 1) ? 200 : 204;
-        // 200 = ok
-        // 204 = nada alterado. Conteúdo da alteração era idêntico
+        if ($affected == 1) {
+          return (object)array('status_code'=>200,'mensagem'=>'Alterado com sucesso');
+        } else {
+          return (object)array('status_code'=>204,'mensagem'=>'Registro não necessita ser modificado');
+        }
     } catch (\Exception $e) {
         //DB::rollback();
         //Campo inválido, erro de sintaxe
-        $retorno = 500;
+        return (object)array('status_code'=>500,'mensagem'=>'Falha ao alterar registro. Erro de sintaxe ou violação de chave'.$e->getMessage());
     }
     return $retorno;
   }
 
   public function delete($id){
-    return DB::table('acao')
-            ->where('id_acao',$id)
-            ->delete();
+    $affected = DB::table('acao')
+                ->where('id_acao',$id)
+                ->delete();
+    if ($affected == 1) {
+      return (object)array('status_code'=>200,'mensagem'=>'Excluído com sucesso');
+    } else {
+      return (object)array('status_code'=>404,'mensagem'=>'Não encontrado');
+    }
   }
 
   // private function modelolistagem($codemp, $codsec = null, $codprf = null) {

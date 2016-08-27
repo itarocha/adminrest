@@ -2,22 +2,18 @@
 
 namespace App\Http\Controllers;
 
-
-// use App\User;
-// use Validator;
-// use App\Http\Controllers\Controller;
-
 use App\Model\AcaoDAO;
 
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
+use Validator;
 
 class AcaoController extends BaseController
 {
-    //use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+  //use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected $dao;
 
@@ -26,72 +22,66 @@ class AcaoController extends BaseController
       $this->dao = $dao;
     }
 
-    // APROVADO!!!
+    // GET
+    // api/acoes
     public function index()
     {
       $retorno = $this->dao->listagem();
-      //$retorno = 'Teste';
       return response()->json(['data'=>$retorno],200);
     }
 
-    // APROVADO!!!
+    // GET
+    // api/acoes/123
     public function show($id)
     {
       $retorno = $this->dao->getById($id);
-      //$retorno = 'Teste';
       if (!is_null($retorno)) {
         return response()->json(['data'=>$retorno],200);
       }
       return response()->json(['data'=>[]],404);
     }
 
-    // TRATAR RETORNO ADEQUADAMENTE
+    // POST
+    // api/acoes {descricao:"texto"}
     public function save(Request $request)
     {
       $all = $request->all();
-      //$descricao = $request->input('descricao');
+
+      $validator = Validator::make($request->all(), $this->dao->getRules());
+
+       if ($validator->fails()) {
+         $erros = $validator->errors()->all();
+         return response()->json(['id'=>-1, 'status_code'=>400, 'erros'=>$erros],400);
+       }
 
       $retorno = $this->dao->insert($all);
 
-      //request->json()->all();
-      //$retorno = $this->dao->getById($id);
-      //$retorno = 'POST';
-      return response()->json(['data'=>['id'=>$retorno]],200);
-    }
-
-    // APROVADO!!!
-    public function update(Request $request, $id)
-    {
-      $all = $request->all();
-      //$descricao = $request->input('descricao');
-      //request->json()->all();
-      //$retorno = $this->dao->getById($id);
-      //$retorno = 'PUT';
-      $retorno = $this->dao->update($id,$all);
-      switch ($retorno) {
-        case 200:
-        case 204:
-            return response()->json(['data'=>['rota'=>$request->url(), 'mensagem'=>'Sucesso '.$retorno]],200);
-            break;
-        case 404:
-          return response()->json(['data'=>['rota'=>'', 'mensagem'=>'Não encontrado']],$retorno);
-          break;
-        case 500:
-          return response()->json(['data'=>['rota'=>'', 'mensagem'=>'Erro de sintaxe']],$retorno);
-          break;
-        default:
-          # code...
-          return response()->json(['data'=>['rota'=>'', 'mensagem'=>'Erro não identificado']],$retorno);
-          break;
+      if ($retorno->id == -1){
+        return response()->json(['data'=>[$retorno]],500);
+      } else {
+        return response()->json(['data'=>[$retorno]],200);
       }
     }
 
-    // TRATAR RETORNO ADEQUADAMENTE
+    // PUT
+    // api/acoes/123 {descricao:"texto"}
+    public function update(Request $request, $id)
+    {
+      $all = $request->all();
+      $retorno = $this->dao->update($id,$all);
+
+      $status_code = ($retorno->status_code == 204) ? 200 : $retorno->status_code;
+      $url = ($status_code == 200) ? $request->url() : '';
+
+      return response()->json(['data'=>['rota'=>$url, 'mensagem'=>$retorno->mensagem]],$status_code);
+    }
+
+    // DELETE
+    // api/acoes/123
     public function delete($id)
     {
       $retorno = $this->dao->delete($id);
-      //$request->path()
-      return response()->json(['data'=>['mensagem'=>"Excluído com sucesso"]],200);
+      return response()->json(['data'=> ['mensagem'=>$retorno->mensagem]],$retorno->status_code);
     }
 
 }
@@ -99,3 +89,23 @@ class AcaoController extends BaseController
 //$route = Route::current();
 //$name = Route::currentRouteName();
 //$action = Route::currentRouteAction();
+//$descricao = $request->input('descricao');
+
+
+/* Retorno de erros de validação
+MessageBag {#158
+  #messages: array:2 [
+    "title" => array:1 [
+      0 => "The title field is required."
+    ]
+    "body" => array:1 [
+      0 => "The body field is required."
+    ]
+  ]
+  #format: ":message"
+}
+
+*/
+
+//https://laravel.com/api/5.3/index.html
+// {data:{rota, mensagem}}
