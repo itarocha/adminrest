@@ -22,6 +22,16 @@ class AcaoController extends BaseController
       $this->dao = $dao;
     }
 
+    private function validaErros(Array $campos){
+      $erros = array();
+      $validator = Validator::make($campos, $this->dao->getRules());
+
+       if ($validator->fails()) {
+         $erros = $validator->errors()->all();
+       }
+       return $erros;
+    }
+
     // GET
     // api/acoes
     public function index()
@@ -46,14 +56,10 @@ class AcaoController extends BaseController
     public function save(Request $request)
     {
       $all = $request->all();
-
-      $validator = Validator::make($request->all(), $this->dao->getRules());
-
-       if ($validator->fails()) {
-         $erros = $validator->errors()->all();
-         return response()->json(['id'=>-1, 'status_code'=>400, 'erros'=>$erros],400);
-       }
-
+      $erros = $this->validaErros($all);
+      if (count($erros) > 0){
+          return response()->json(['id'=>-1, 'status_code'=>400, 'erros'=>$erros],400);
+      }
       $retorno = $this->dao->insert($all);
 
       if ($retorno->id == -1){
@@ -68,6 +74,12 @@ class AcaoController extends BaseController
     public function update(Request $request, $id)
     {
       $all = $request->all();
+
+      $erros = $this->validaErros($all);
+      if (count($erros) > 0){
+          return response()->json(['id'=>-1, 'status_code'=>400, 'erros'=>$erros],400);
+      }
+
       $retorno = $this->dao->update($id,$all);
 
       $status_code = ($retorno->status_code == 204) ? 200 : $retorno->status_code;
