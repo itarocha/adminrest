@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\AcaoDAO;
+use App\Model\EmpresaDAO;
 
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -11,13 +11,13 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Validator;
 
-class AcaoController extends BaseController
+class EmpresaController extends BaseController
 {
   //use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected $dao;
 
-    public function __construct(AcaoDAO $dao)
+    public function __construct(EmpresaDAO $dao)
     {
       $this->dao = $dao;
     }
@@ -33,7 +33,7 @@ class AcaoController extends BaseController
     }
 
     // GET
-    // api/acoes
+    // api/empresas
     public function index()
     {
       $retorno = $this->dao->listagem();
@@ -41,7 +41,7 @@ class AcaoController extends BaseController
     }
 
     // GET
-    // api/acoes/123
+    // api/empresas/123
     public function show($id)
     {
       $retorno = $this->dao->getById($id);
@@ -52,7 +52,7 @@ class AcaoController extends BaseController
     }
 
     // POST
-    // api/acoes {descricao:"texto"}
+    // api/empresas {descricao:"texto"}
     public function save(Request $request)
     {
       $all = $request->all();
@@ -73,7 +73,7 @@ class AcaoController extends BaseController
     }
 
     // PUT
-    // api/acoes/123 {descricao:"texto"}
+    // api/empresas/123 {descricao:"texto"}
     public function update(Request $request, $id)
     {
       $all = $request->all();
@@ -97,7 +97,7 @@ class AcaoController extends BaseController
     }
 
     // DELETE
-    // api/acoes/123
+    // api/empresas/123
     public function delete($id)
     {
       $retorno = $this->dao->delete($id);

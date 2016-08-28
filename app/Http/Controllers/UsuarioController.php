@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\AcaoDAO;
+use App\Model\UsuarioDAO;
 
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -11,13 +11,13 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Validator;
 
-class AcaoController extends BaseController
+class UsuarioController extends BaseController
 {
   //use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected $dao;
 
-    public function __construct(AcaoDAO $dao)
+    public function __construct(UsuarioDAO $dao)
     {
       $this->dao = $dao;
     }
@@ -33,7 +33,7 @@ class AcaoController extends BaseController
     }
 
     // GET
-    // api/acoes
+    // api/usuarios
     public function index()
     {
       $retorno = $this->dao->listagem();
@@ -41,7 +41,7 @@ class AcaoController extends BaseController
     }
 
     // GET
-    // api/acoes/123
+    // api/usuarios/123
     public function show($id)
     {
       $retorno = $this->dao->getById($id);
@@ -52,7 +52,7 @@ class AcaoController extends BaseController
     }
 
     // POST
-    // api/acoes {descricao:"texto"}
+    // api/usuarios {nome:"texto", login:"texto", senha:"texto"}
     public function save(Request $request)
     {
       $all = $request->all();
@@ -63,6 +63,19 @@ class AcaoController extends BaseController
                                     'erros'=>$erros]
                                     ,400);
       }
+
+
+      $senha = bcrypt($request->input('senha'));
+
+      //dd($all);
+      //dd($senha);
+      $all['senha'] = $senha;
+      //dd($all);
+
+
+      //$senha = $all()
+      //bcrypt($data['password']
+
       $retorno = $this->dao->insert($all);
 
       if ($retorno->id == -1){
@@ -73,7 +86,7 @@ class AcaoController extends BaseController
     }
 
     // PUT
-    // api/acoes/123 {descricao:"texto"}
+    // api/usuarios/123 {nome:"texto", login:"texto", senha:"texto"}
     public function update(Request $request, $id)
     {
       $all = $request->all();
@@ -97,7 +110,7 @@ class AcaoController extends BaseController
     }
 
     // DELETE
-    // api/acoes/123
+    // api/usuarios/123
     public function delete($id)
     {
       $retorno = $this->dao->delete($id);

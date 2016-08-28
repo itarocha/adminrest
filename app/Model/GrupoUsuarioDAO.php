@@ -6,27 +6,27 @@ namespace App\Model;
 use DB;
 use Laravel\Database\Exception;
 
-class AcaoDAO {
+class GrupoUsuarioDAO {
 
 
   public function getRules(){
-    return array('descricao' => 'required|min:3|max:32',);
+    return array('descricao' => 'required|min:8|max:64',);
   }
 
 
   public function listagem(){
-    $query = DB::table('acao as a')
-              ->select('a.id_acao', 'a.descricao')
-              ->orderBy('a.descricao');
+    $query = DB::table('grupo_usuario as tb')
+              ->select('tb.id_grupo_usuario', 'tb.descricao')
+              ->orderBy('tb.descricao');
     $retorno = $query->get();
     return $retorno;
   }
 
 
   public function getById($id){
-    $query = DB::table('acao as a')
-              ->select('a.id_acao', 'a.descricao')
-              ->where('a.id_acao','=',$id);
+    $query = DB::table('grupo_usuario as tb')
+              ->select('tb.id_grupo_usuario', 'tb.descricao')
+              ->where('tb.id_grupo_usuario','=',$id);
     $retorno = $query->get();
     if ($retorno->count() > 0) {
       return $retorno;
@@ -38,7 +38,7 @@ class AcaoDAO {
 
   public function insert($array){
     try {
-      $id = DB::table('acao')->insertGetId($array);
+      $id = DB::table('grupo_usuario')->insertGetId($array);
       return (object)array( 'id' => $id,
                             'status_code' => 200,
                             'mensagem' => 'Criado com sucesso');
@@ -58,8 +58,8 @@ class AcaoDAO {
                             'mensagem'=>'Não encontrado');
     }
     try {
-      $affected = DB::table('acao')
-                    ->where('id_acao',$id)
+      $affected = DB::table('grupo_usuario')
+                    ->where('id_grupo_usuario',$id)
                     ->update($array);
       $retorno = ($affected == 1) ? 200 : 204;
       if ($affected == 1) {
@@ -81,8 +81,8 @@ class AcaoDAO {
 
   public function delete($id)
   {
-    $affected = DB::table('acao')
-                ->where('id_acao',$id)
+    $affected = DB::table('grupo_usuario')
+                ->where('id_grupo_usuario',$id)
                 ->delete();
     if ($affected == 1) {
       return (object)array( 'status_code'=>200,

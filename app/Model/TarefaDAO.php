@@ -6,27 +6,29 @@ namespace App\Model;
 use DB;
 use Laravel\Database\Exception;
 
-class AcaoDAO {
+class TarefaDAO {
 
 
   public function getRules(){
-    return array('descricao' => 'required|min:3|max:32',);
+    return array( 'descricao' => 'required|min:2|max:128',
+                  'view' => 'required|min:8|max:128',
+                );
   }
 
 
   public function listagem(){
-    $query = DB::table('acao as a')
-              ->select('a.id_acao', 'a.descricao')
-              ->orderBy('a.descricao');
+    $query = DB::table('tarefa as tb')
+              ->select('tb.id_tarefa', 'tb.descricao', 'tb.view')
+              ->orderBy('tb.descricao');
     $retorno = $query->get();
     return $retorno;
   }
 
 
   public function getById($id){
-    $query = DB::table('acao as a')
-              ->select('a.id_acao', 'a.descricao')
-              ->where('a.id_acao','=',$id);
+    $query = DB::table('tarefa as tb')
+              ->select('tb.id_tarefa', 'tb.descricao', 'tb.view')
+              ->where('tb.id_tarefa','=',$id);
     $retorno = $query->get();
     if ($retorno->count() > 0) {
       return $retorno;
@@ -38,7 +40,7 @@ class AcaoDAO {
 
   public function insert($array){
     try {
-      $id = DB::table('acao')->insertGetId($array);
+      $id = DB::table('tarefa')->insertGetId($array);
       return (object)array( 'id' => $id,
                             'status_code' => 200,
                             'mensagem' => 'Criado com sucesso');
@@ -58,8 +60,8 @@ class AcaoDAO {
                             'mensagem'=>'Não encontrado');
     }
     try {
-      $affected = DB::table('acao')
-                    ->where('id_acao',$id)
+      $affected = DB::table('tarefa')
+                    ->where('id_tarefa',$id)
                     ->update($array);
       $retorno = ($affected == 1) ? 200 : 204;
       if ($affected == 1) {
@@ -81,8 +83,8 @@ class AcaoDAO {
 
   public function delete($id)
   {
-    $affected = DB::table('acao')
-                ->where('id_acao',$id)
+    $affected = DB::table('tarefa')
+                ->where('id_tarefa',$id)
                 ->delete();
     if ($affected == 1) {
       return (object)array( 'status_code'=>200,
