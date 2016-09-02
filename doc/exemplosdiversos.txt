@@ -1,3 +1,18 @@
+If someone is still looking for a solution, there is an easy fix:
+
+Go to http://curl.haxx.se/ca/cacert.pem and download the pem file and save in your php installation directory ( make sure while saving it retains the extension and not saved as a text file )
+
+Now, open your php.ini file, scroll to the bottom and add the following line:
+
+[cURL]
+curl.cainfo="D:\xampp\php\cacert.pem"
+Replace D:\xampp\php\cacert.pem with the actual path.
+
+Courtesy: http://stackoverflow.com/questions/17478283/paypal-access-ssl-certificate-unable-to-get-local-issuer-certificate
+
+
+
+
 //DB::beginTransaction();
 //DB::commit();
 //DB::rollback();

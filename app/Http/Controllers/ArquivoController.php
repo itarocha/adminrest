@@ -103,7 +103,12 @@ class ArquivoController extends BaseController
         $a['mimeType'] = $file->getClientMimeType();
         $a['clientOriginalName'] = $file->getClientOriginalName();
         $a['size'] = $file->getClientSize().' bytes ';
+        $a['maxFilesize'] = $file->getmaxFilesize(); // upload_max_filesize=20M
+        $a['linkTarget'] = $file->getLinkTarget();
         $a['isValid'] = $file->isValid();
+
+        // getMaxFilesize( )
+        // Returns the maximum size of an uploaded file as configured in php.ini
         // Grava no diretório  .\storage\app\arquivos
         $a['path'] = $request->file('arquivo')->store('arquivos');
         return response()->json($a,200);
@@ -158,3 +163,12 @@ class ArquivoController extends BaseController
     //                           ,$retorno->status_code);
     // }
 }
+
+
+// `'google' => [
+// 'driver' => 's3',
+//  'key' => 'xxx',
+//  'secret' => 'xxx',
+//  'bucket' => 'qrnotesfiles',
+//  'base_url'=>'https://storage.googleapis.com'
+// ],`
