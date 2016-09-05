@@ -11,7 +11,9 @@ class HomeController extends Controller
     public function index()
     {
         //return "xis";
-        return view('login');
+
+        $text = '<p><strong>Lorem</strong> ipsum dolor <img src="images/test.jpg"></p>';
+        return view('login')->with('text',$text);
     }
 
     public function getDownload(){

@@ -73,6 +73,8 @@ class ArquivoController extends BaseController
     // }
 
 
+
+
     // POST
     // api/acoes {descricao:"texto"}
     public function upload(Request $request)
@@ -127,6 +129,9 @@ class ArquivoController extends BaseController
         // Returns the maximum size of an uploaded file as configured in php.ini
         // Grava no diretório  .\storage\app\arquivos
         $a['path'] = $request->file('arquivo')->store('arquivos');
+
+        // $file->move('uploads', $file->getClientOriginalName());
+
         return response()->json($a,200);
       }
 

@@ -1,6 +1,9 @@
 @extends('layouts.default')
 
 @section('content')
+
+{!! $text !!}
+
 <div>
   <iframe height="150"
      width="250"
