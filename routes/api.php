@@ -57,9 +57,4 @@ Route::post('usuarios','UsuarioController@save');
 Route::put('usuarios/{id}','UsuarioController@update');
 Route::delete('usuarios/{id}','UsuarioController@delete');
 
-// Arquivos
-//Route::get('arquivos','ArquivoController@index');
-//Route::get('arquivos/{id}','ArquivoController@show');
-Route::post('arquivos','ArquivoController@save');
-//Route::put('arquivos/{id}','ArquivoController@update');
-//Route::delete('arquivos/{id}','ArquivoController@delete');
+Route::post('upload','ArquivoController@upload');

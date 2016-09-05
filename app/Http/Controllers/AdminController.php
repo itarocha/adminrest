@@ -115,54 +115,6 @@ class AdminController extends Controller
     }
 
 
-    public function upload()
-    {
-        return view('admin.upload');
-    }
-
-
-    public function doUpload(Request $request)
-    {
-        if ($request->hasFile('file')) {
-
-            $file = $request->file('file');
-
-            $mime_type = $file->getMimeType();
-            $title = $file->getClientOriginalName();
-            $description = $request->input('description');
-
-            $drive_file = new \Google_Service_Drive_DriveFile();
-            $drive_file->setName($title);
-            $drive_file->setDescription($description);
-            $drive_file->setMimeType($mime_type);
-
-            try {
-                $createdFile = $this->drive->files->create($drive_file, [
-                    'data' => $file,
-                    'mimeType' => $mime_type,
-                    'uploadType' => 'multipart'
-                ]);
-
-                $file_id = $createdFile->getId();
-
-                return redirect('/upload')
-                    ->with('message', [
-                        'type' => 'success',
-                        'text' => "File was uploaded with the following ID: {$file_id}"
-                ]);
-
-            } catch (Exception $e) {
-
-                return redirect('/upload')
-                    ->with('message', [
-                        'type' => 'error',
-                        'text' => 'An error occurred while trying to upload the file'
-                    ]);
-
-            }
-        }
-
-    }
 
     public function logout(Request $request)
     {

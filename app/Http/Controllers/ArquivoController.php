@@ -11,6 +11,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
+use Illuminate\Support\Facades\Response;
 use Validator;
 
 class ArquivoController extends BaseController
@@ -57,9 +58,24 @@ class ArquivoController extends BaseController
     //   return response()->json(['data'=>[]],404);
     // }
 
+    // public function getDownload(){
+    //   $path = public_path()."/download/musica.mp3";
+    //
+    //   //dd($path);
+    //
+    //   //PDF file is stored under project/public/download/info.pdf
+    //   // https://www.sitepoint.com/web-foundations/mime-types-complete-list/
+    //   $file= public_path(). "/download/musica.mp3";
+    //   $headers = array(
+    //     'Content-Type: audio/mpeg3',
+    //   );
+    //   return Response::download($path, 'filename.mp3', $headers);
+    // }
+
+
     // POST
     // api/acoes {descricao:"texto"}
-    public function save(Request $request)
+    public function upload(Request $request)
     {
 
       //curl -F/--form <name=content> Specify HTTP multipart POST data (H)

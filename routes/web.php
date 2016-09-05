@@ -16,6 +16,16 @@
 //      return "fala garoto";
 // });
 
+// Arquivos
+Route::get('baixar','HomeController@getDownload');
+//Route::get('arquivos','ArquivoController@index');
+//Route::get('arquivos/{id}','ArquivoController@show');
+Route::post('upload','ArquivoController@upload');
+//Route::put('arquivos/{id}','ArquivoController@update');
+//Route::delete('arquivos/{id}','ArquivoController@delete');
+
+
+
 Route::get('/', 'HomeController@index');
 
 // This is where the user gets redirected upon clicking the login button on the home page
@@ -33,6 +43,8 @@ Route::get('/search', 'AdminController@search');
 // Allows the user to upload new files
 Route::get('/upload', 'AdminController@upload');
 Route::post('/upload', 'AdminController@doUpload');
+//Route::get('/baixar', 'AdminController@getDownload');
+
 
 // Allows the user to delete a file
 Route::get('/delete/{id}', 'AdminController@delete');

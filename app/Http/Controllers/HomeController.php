@@ -2,6 +2,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use App\Googl;
 
 class HomeController extends Controller
@@ -12,6 +14,25 @@ class HomeController extends Controller
         return view('login');
     }
 
+    public function getDownload(){
+      //https://laravel.com/docs/5.3/helpers#method-storage-path
+      //dd(storage_path('app/arquivos'));
+
+      //$path = public_path()."/download/e568db12f6abfe4cf4a7d6c87381d132.mpga";
+
+      //$path = public_path()."/download/musica.mp3";
+      $path = storage_path('app/arquivos')."/e568db12f6abfe4cf4a7d6c87381d132.mpga";
+
+      //dd($path);
+
+      //PDF file is stored under project/public/download/info.pdf
+      // https://www.sitepoint.com/web-foundations/mime-types-complete-list/
+      //$file= public_path(). "/download/musica.mp3";
+      $headers = array(
+        'Content-Type: audio/mpeg3',
+      );
+      return Response::download($path, 'nuevamusik.mp3', $headers);
+    }
 
     public function login(Googl $googl, Request $request)
     {
@@ -19,7 +40,7 @@ class HomeController extends Controller
 
         if ($request->has('code')) {
 
-            $client->authenticate($request->input('code'));
+              $client->authenticate($request->input('code'));
 
             $token = $client->getAccessToken();
 
