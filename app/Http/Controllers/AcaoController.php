@@ -48,7 +48,7 @@ class AcaoController extends BaseController
       if (!is_null($retorno)) {
         return response()->json(['data'=>$retorno],200);
       }
-      return response()->json(['data'=>[]],404);
+      return response()->json(['data'=>null],404);
     }
 
     // POST
@@ -59,16 +59,16 @@ class AcaoController extends BaseController
       $erros = $this->validaErros($all);
       if (count($erros) > 0){
           return response()->json([ 'id'=>-1,
-                                    'status_code'=>400,
+                                    'status'=>400,
                                     'erros'=>$erros]
                                     ,400);
       }
       $retorno = $this->dao->insert($all);
 
       if ($retorno->id == -1){
-        return response()->json(['data'=>[$retorno]],500);
+        return response()->json($retorno,500);
       } else {
-        return response()->json(['data'=>[$retorno]],200);
+        return response()->json($retorno,200);
       }
     }
 
@@ -81,7 +81,7 @@ class AcaoController extends BaseController
       $erros = $this->validaErros($all);
       if (count($erros) > 0){
           return response()->json([ 'id'=>-1,
-                                    'status_code'=>400,
+                                    'status'=>400,
                                     'erros'=>$erros]
                                     ,400);
       }

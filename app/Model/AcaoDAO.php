@@ -40,11 +40,11 @@ class AcaoDAO {
     try {
       $id = DB::table('acao')->insertGetId($array);
       return (object)array( 'id' => $id,
-                            'status_code' => 200,
+                            'status' => 200,
                             'mensagem' => 'Criado com sucesso');
     } catch (\Exception $e){
       return (object)array( 'id' => -1,
-                            'status_code' => 500,
+                            'status' => 500,
                             'mensagem' => $e->getMessage());
     }
   }
@@ -54,7 +54,7 @@ class AcaoDAO {
     $model = $this->getById($id);
 
     if (!$model){
-      return (object)array( 'status_code'=>404,
+      return (object)array( 'status'=>404,
                             'mensagem'=>'Não encontrado');
     }
     try {
@@ -63,15 +63,15 @@ class AcaoDAO {
                     ->update($array);
       $retorno = ($affected == 1) ? 200 : 204;
       if ($affected == 1) {
-        return (object)array(   'status_code'=>200,
+        return (object)array(   'status'=>200,
                                 'mensagem'=>'Alterado com sucesso');
       } else {
-          return (object)array( 'status_code'=>204,
+          return (object)array( 'status'=>204,
                                 'mensagem'=>'Registro não necessita ser modificado');
       }
     } catch (\Exception $e) {
         //Campo inválido, erro de sintaxe
-        return (object)array('status_code'=>500,
+        return (object)array('status'=>500,
             'mensagem'=>'Falha ao alterar registro. Erro de sintaxe ou violação de chave'
             .$e->getMessage());
     }
@@ -85,10 +85,10 @@ class AcaoDAO {
                 ->where('id_acao',$id)
                 ->delete();
     if ($affected == 1) {
-      return (object)array( 'status_code'=>200,
+      return (object)array( 'status'=>200,
                             'mensagem'=>'Excluído com sucesso');
     } else {
-      return (object)array( 'status_code'=>404,
+      return (object)array( 'status'=>404,
                             'mensagem'=>'Não encontrado');
     }
   }
