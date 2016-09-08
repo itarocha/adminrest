@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-//use App\Model\AcaoDAO;
+use App\Model\MusicaDAO;
 
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -20,10 +20,10 @@ class ArquivoController extends BaseController
 
     protected $dao;
 
-    // public function __construct(AcaoDAO $dao)
-    // {
-    //   $this->dao = $dao;
-    // }
+    public function __construct(MusicaDAO $dao)
+    {
+      $this->dao = $dao;
+    }
 
     public function __construct()
     {
@@ -113,7 +113,9 @@ class ArquivoController extends BaseController
       // Documentação
       // http://v3.golaravel.com/api/class-Symfony.Component.HttpFoundation.File.UploadedFile.html
 
-      //dd($request);
+      dd($request->all());
+
+      
       $arquivos=array();
       if ($request->hasFile('arquivo')){
         $a = array();
