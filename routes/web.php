@@ -30,6 +30,7 @@ Route::get('/', 'HomeController@index');
 
 // This is where the user gets redirected upon clicking the login button on the home page
 Route::get('/login', 'HomeController@login');
+Route::post('/filter', 'HomeController@filter');
 
 // Shows a list of things that the user can do in the app
 Route::get('/dashboard', 'AdminController@index');

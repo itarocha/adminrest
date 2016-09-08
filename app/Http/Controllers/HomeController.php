@@ -8,13 +8,51 @@ use App\Googl;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //return "xis";
-
-        $text = '<p><strong>Lorem</strong> ipsum dolor <img src="images/test.jpg"></p>';
+        $text = '<p><strong>Lorem</strong> ipsum dolor <h2>Hello</h2></p>';
         return view('login')->with('text',$text);
     }
+
+
+    public function filter(Request $request){
+
+      //dd($request->all());
+      //dd($request->input('produto'));
+
+      $produtos = $request->input('produto');
+
+      $texto = '';
+
+      //dd($produtos);
+
+      foreach($produtos as $produto){
+        if ($produto){
+          echo($produto.'<br/>');
+        }
+      }
+
+      $campos = array(  (object) array('descricao' => 'Nome', 'valor' => 'Itamar'),
+                        (object) array('descricao' => 'Cidade', 'valor' => 'Uberlândia'),
+                        (object) array('descricao' => 'Bairro', 'valor' => 'Jaraguá'),
+                      );
+
+      //dd($campos);
+
+      $itens = $request->input('q');
+      if ($itens) {
+        dd($itens);
+        foreach($itens as $item){
+          // if ($item['valor']){
+          //   echo($item['valor'].'<br/>');
+          // }
+        }
+      }
+
+
+      return view('login')->with('campos',$campos);
+    }
+
 
     public function getDownload(){
       //https://laravel.com/docs/5.3/helpers#method-storage-path
