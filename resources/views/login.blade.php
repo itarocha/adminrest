@@ -24,10 +24,35 @@
   <br/>
   <br/>
 
+  <!--
   <input type="text" name="produto[]" value="Produto 1" />
   <input type="text" name="produto[]" value="Produto 2" />
   <input type="text" name="produto[]" value="Produto 3" />
   <br/>
+
+  <!-- produto 1 -->
+  <!--
+  <input type="text" name="produto[0][nome]" value="nome do produto" />
+  <input type="text" name="produto[0][valor]" value="valor do produto" />
+  <input type="text" name="produto[0][codigo]" value="codigo do produto" /> -->
+
+  <!-- produto 2 -->
+  <!--
+  <input type="text" name="produto[1][nome]" value="nome do produto" />
+  <input type="text" name="produto[1][valor]" value="valor do produto" />
+  <input type="text" name="produto[1][codigo]" value="codigo do produto" /> -->
+
+  <!-- produto 3 -->
+  <!--
+  <input type="text" name="produto[2][nome]" value="nome do produto" />
+  <input type="text" name="produto[2][valor]" value="valor do produto" />
+  <input type="text" name="produto[2][codigo]" value="codigo do produto" /> -->
+
+  <!-- if(!empty($_POST['produto']) && is_array($_POST['produto'])){
+    foreach($_POST['produto'] as $item) {
+      echo $item['nome'], ' com valor ', $item['valor'], ' e codigo ', $item['codigo'], '<br />', PHP_EOL;
+    }
+  } -->
 
   @if(isset($campos))
   <p>{{count($campos)}} elementos</p>
